@@ -39,6 +39,7 @@
 		<jakarta-validation.version>3.1.0</jakarta-validation.version>
 		<jjwt.version>0.12.6</jjwt.version>
 		<mybatis.version>3.0.4</mybatis.version>
+		<liquibase.version>4.30.0</liquibase.version>
 	</properties>
 
 	<dependencies>
@@ -62,6 +63,12 @@
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>${mybatis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase.version}</version>
 		</dependency>
 
 		<dependency>

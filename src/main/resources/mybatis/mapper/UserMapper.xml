@@ -62,7 +62,7 @@
         UPDATE users
         SET name = #{name},
         username = #{username},
-        password = #{password},
+        password = #{password}
         WHERE id = #{id}
     </update>
 
