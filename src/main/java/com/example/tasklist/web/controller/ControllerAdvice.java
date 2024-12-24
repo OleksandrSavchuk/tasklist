@@ -80,6 +80,7 @@ public class ControllerAdvice {
     public ExceptionBody handleAuthentication(
             final AuthenticationException e
     ) {
+        e.printStackTrace();
         return new ExceptionBody("Authentication failed.");
     }
 
