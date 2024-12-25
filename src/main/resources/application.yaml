@@ -20,9 +20,6 @@ spring:
     enabled: true
     default-schema: tasklist
 
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
-
 security:
   jwt:
     secret: ${JWT_SECRET}
