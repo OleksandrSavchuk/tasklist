@@ -25,7 +25,7 @@ public class User implements Serializable {
     private String passwordConfirmation;
 
     @Column(name = "role")
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "users_roles")
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
