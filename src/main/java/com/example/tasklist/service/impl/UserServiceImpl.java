@@ -24,24 +24,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable(value = "UserService::getById", key = "#id")
-    public User getById(Long id) {
+    public User getById(final Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
     }
 
     @Override
     @Cacheable(value = "UserService::getByUsername", key = "#username")
-    public User getByUsername(String username) {
+    public User getByUsername(final String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
     }
 
     @Override
     @Caching(put = {
-            @CachePut(value = "UserService::getById", key = "#user.id"),
-            @CachePut(value = "UserService::getByUsername", key = "#user.username")
+            @CachePut(value = "UserService::getById",
+                    key = "#user.id"),
+            @CachePut(value = "UserService::getByUsername",
+                    key = "#user.username")
     })
-    public User update(User user) {
+    public User update(final User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return user;
@@ -49,10 +53,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Caching(put = {
-            @CachePut(value = "UserService::getById", key = "#user.id"),
-            @CachePut(value = "UserService::getByUsername", key = "#user.username")
+            @CachePut(value = "UserService::getById",
+                    key = "#user.id"),
+            @CachePut(value = "UserService::getByUsername",
+                    key = "#user.username")
     })
-    public User create(User user) {
+    public User create(final User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalStateException("Username already exists");
         }
@@ -68,14 +74,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "UserService::isTaskOwner", key = "#userId + '.' + #taskId")
-    public boolean isTaskOwner(Long userId, Long taskId) {
+    @Cacheable(value = "UserService::isTaskOwner",
+            key = "#userId + '.' + #taskId")
+    public boolean isTaskOwner(final Long userId, final Long taskId) {
+
         return userRepository.isTaskOwner(userId, taskId);
     }
 
     @Override
-    @CacheEvict(value = "UserService::getById", key = "#id")
-    public void delete(Long id) {
+    @CacheEvict(value = "UserService::getById",
+            key = "#id")
+    public void delete(final Long id) {
+
         userRepository.deleteById(id);
     }
 

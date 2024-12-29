@@ -57,7 +57,8 @@ public class ApplicationConfig {
     public MinioClient minioClient() {
         return MinioClient.builder()
                 .endpoint(minioProperties.getUrl())
-                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
+                .credentials(minioProperties.getAccessKey(),
+                        minioProperties.getSecretKey())
                 .build();
     }
 
@@ -84,32 +85,49 @@ public class ApplicationConfig {
 
     @Bean
     @SneakyThrows
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(
+            final HttpSecurity httpSecurity
+    ) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .httpBasic(
+                        AbstractHttpConfigurer::disable
+                )
+                .sessionManagement(
+                        sessionManagement -> sessionManagement
+                                .sessionCreationPolicy(
+                                        SessionCreationPolicy.STATELESS
+                                )
                 )
                 .exceptionHandling(configurer -> configurer
                         .authenticationEntryPoint(
                                 (request, response, authException) -> {
-                                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                                    response.getWriter().write("Unauthorized1.");
+                                    response.setStatus(
+                                            HttpStatus.UNAUTHORIZED.value()
+                                    );
+                                    response.getWriter()
+                                            .write("Unauthorized1.");
                                 })
                         .accessDeniedHandler(
                                 (request, response, accessDeniedException) -> {
-                                    response.setStatus(HttpStatus.FORBIDDEN.value());
-                                    response.getWriter().write("Unauthorized2.");
+                                    response.setStatus(
+                                            HttpStatus.FORBIDDEN.value()
+                                    );
+                                    response.getWriter()
+                                            .write("Unauthorized2.");
                                 }))
                 .authorizeHttpRequests(configurer ->
-                        configurer.requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**").permitAll()
+                        configurer.requestMatchers("/api/v1/auth/**")
+                                .permitAll()
+                                .requestMatchers("/swagger-ui/**")
+                                .permitAll()
+                                .requestMatchers("/v3/api-docs/**")
+                                .permitAll()
                                 .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
