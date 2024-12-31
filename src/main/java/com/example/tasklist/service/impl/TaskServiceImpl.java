@@ -10,6 +10,7 @@ import com.example.tasklist.service.ImageService;
 import com.example.tasklist.service.TaskService;
 import com.example.tasklist.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -54,12 +55,20 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    @Cacheable(value = "TaskService::getById", key = "#task.id")
-    public Task create(final Task task, final Long userId) {
-        User user = userService.getById(userId);
-        task.setStatus(Status.TODO);
-        user.getTasks().add(task);
-        userService.update(user);
+    @Cacheable(
+            value = "TaskService::getById",
+            condition = "#task.id!=null",
+            key = "#task.id"
+    )
+    public Task create(
+            final Task task,
+            final Long userId
+    ) {
+        if (task.getStatus() == null) {
+            task.setStatus(Status.TODO);
+        }
+        taskRepository.save(task);
+        taskRepository.assignTask(userId, task.getId());
         return task;
     }
 
