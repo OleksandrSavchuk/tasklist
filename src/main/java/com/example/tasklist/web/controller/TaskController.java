@@ -52,7 +52,7 @@ public class TaskController {
     }
 
     @PutMapping
-    @MutationMapping(name ="updateTask")
+    @MutationMapping(name = "updateTask")
     @Operation(summary = "Update task")
     @PreAuthorize("@customSecurityExpression.canAccessTask(#dto.id)")
     public TaskDto update(@Validated(OnUpdate.class)
@@ -63,7 +63,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    @MutationMapping(name ="deleteTask")
+    @MutationMapping(name = "deleteTask")
     @Operation(summary = "Delete task by id")
     @PreAuthorize("@customSecurityExpression.canAccessTask(#id)")
     public void deleteById(@PathVariable @Argument final Long id) {

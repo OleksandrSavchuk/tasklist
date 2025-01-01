@@ -80,7 +80,8 @@ public class UserController {
     @QueryMapping(name = "tasksByUserId")
     @Operation(summary = "Get all User tasks")
     @PreAuthorize("@customSecurityExpression.canAccessUser(#id)")
-    public List<TaskDto> getTasksByUserId(@PathVariable @Argument final Long id) {
+    public List<TaskDto> getTasksByUserId(@PathVariable
+                                              @Argument final Long id) {
         User user = userService.getById(id);
         List<Task> tasks = taskService.getAllByUserId(id);
         return taskMapper.toDto(tasks);
