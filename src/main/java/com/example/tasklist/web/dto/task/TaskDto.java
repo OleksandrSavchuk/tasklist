@@ -29,15 +29,19 @@ public class TaskDto {
             description = "Task title",
             example = "Do homework"
     )
-    @NotNull(message = "Title must be not null.", groups = {OnCreate.class, OnUpdate.class})
-    @Length(max = 255, message = "Title length be less than 255 characters", groups = {OnCreate.class, OnUpdate.class})
+    @NotNull(message = "Title must be not null.",
+            groups = {OnCreate.class, OnUpdate.class})
+    @Length(max = 255, message = "Title length be less than 255 characters",
+            groups = {OnCreate.class, OnUpdate.class})
     private String title;
 
     @Schema(
             description = "Task description",
             example = "Math, Physics, Literature"
     )
-    @Length(max = 255, message = "Description length be less than 255 characters", groups = {OnCreate.class, OnUpdate.class})
+    @Length(max = 255,
+            message = "Description length be less than 255 characters",
+            groups = {OnCreate.class, OnUpdate.class})
     private String description;
 
     @Schema(

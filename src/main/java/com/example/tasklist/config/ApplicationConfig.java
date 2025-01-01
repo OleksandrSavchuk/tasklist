@@ -4,15 +4,13 @@ import com.example.tasklist.service.props.MinioProperties;
 import com.example.tasklist.web.security.JwtTokenFilter;
 import com.example.tasklist.web.security.JwtTokenProvider;
 import io.minio.MinioClient;
-import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,10 +55,11 @@ public class ApplicationConfig {
 
     @Bean
     public MinioClient minioClient() {
-         return MinioClient.builder()
-                 .endpoint(minioProperties.getUrl())
-                 .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
-                 .build();
+        return MinioClient.builder()
+                .endpoint(minioProperties.getUrl())
+                .credentials(minioProperties.getAccessKey(),
+                        minioProperties.getSecretKey())
+                .build();
     }
 
     @Bean
@@ -86,32 +85,51 @@ public class ApplicationConfig {
 
     @Bean
     @SneakyThrows
-    public SecurityFilterChain filterChain (HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(
+            final HttpSecurity httpSecurity
+    ) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .httpBasic(
+                        AbstractHttpConfigurer::disable
+                )
+                .sessionManagement(
+                        sessionManagement -> sessionManagement
+                                .sessionCreationPolicy(
+                                        SessionCreationPolicy.STATELESS
+                                )
                 )
                 .exceptionHandling(configurer -> configurer
                         .authenticationEntryPoint(
                                 (request, response, authException) -> {
-                                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                                    response.getWriter().write("Unauthorized1.");
+                                    response.setStatus(
+                                            HttpStatus.UNAUTHORIZED.value()
+                                    );
+                                    response.getWriter()
+                                            .write("Unauthorized1.");
                                 })
                         .accessDeniedHandler(
                                 (request, response, accessDeniedException) -> {
-                                    response.setStatus(HttpStatus.FORBIDDEN.value());
-                                    response.getWriter().write("Unauthorized2.");
+                                    response.setStatus(
+                                            HttpStatus.FORBIDDEN.value()
+                                    );
+                                    response.getWriter()
+                                            .write("Unauthorized2.");
                                 }))
                 .authorizeHttpRequests(configurer ->
-                        configurer.requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/swagger-ui/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**").permitAll()
+                        configurer.requestMatchers("/api/v1/auth/**")
+                                .permitAll()
+                                .requestMatchers("/swagger-ui/**")
+                                .permitAll()
+                                .requestMatchers("/v3/api-docs/**")
+                                .permitAll()
+                                .requestMatchers("/graphiql")
+                                .permitAll()
                                 .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
-                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(tokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

@@ -87,7 +87,9 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ImageUploadException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleImageUpload(ImageUploadException e) {
+    public ExceptionBody handleImageUpload(
+            final ImageUploadException e
+    ) {
         return new ExceptionBody(e.getMessage());
     }
 

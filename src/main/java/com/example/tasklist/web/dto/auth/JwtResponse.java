@@ -21,13 +21,25 @@ public class JwtResponse {
 
     @Schema(
             description = "Access token",
-            example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWQiOjEsInJvbGVzIjpbIlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwiZXhwIjoxNDY5NDUyOTMyNn0.2hz3feMD0LTdF7_ABYyRJJufPfaZsvUY84VsO6ypNgFX8doWm1MDeh8CJLayzLQHRu7WgwGBUbRqOMwzjr5zlg"
+            example = "eyJhbGciOiJIUzUxMiJ9.eyJ"
+                    + "zdWIiOiJqb2huZG9lIiwiaWQiOjEsInJvbGVzIjpb"
+                    + "IlJPTEVfQURNSU4iLCJST0xFX1VTRVIiXSwiZXhw"
+                    + "IjoxNDY5NDUyOTMyNn0.2hz3feMD0LTdF7_ABYyR"
+                    + "JJufPfaZsvUY84VsO6ypNgFX8doWm1MDeh8CJLay"
+                    + "zLQHRu7WgwGBUbRqOMwzjr5zlg"
     )
     private String accessToken;
 
     @Schema(
             description = "Refresh token",
-            example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWQiOjEsImV4cCI6MjIzOTUwNTM0NTI5MzI2fQ.9n9d8EC_rTNEfdKhfRnR3I1F5j5bFtihKHC3Lbl2Xp5AAqdgg72zDs5khQFhKt3eXR7JC623ulsxZIZst3vAjA"
+            example = "eyJhbGciOiJIUzUxMiJ9"
+                    + ".eyJzdWIiOiJqb2huZG9lIi"
+                    + "wiaWQiOjEsImV4cCI6MjIzO"
+                    + "TUwNTM0NTI5MzI2fQ.9n9d8"
+                    + "EC_rTNEfdKhfRnR3I1F5j5b"
+                    + "FtihKHC3Lbl2Xp5AAqdgg72"
+                    + "zDs5khQFhKt3eXR7JC623ul"
+                    + "sxZIZst3vAjA"
     )
     private String refreshToken;
 
