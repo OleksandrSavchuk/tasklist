@@ -11,6 +11,9 @@ import com.example.tasklist.web.mappers.TaskMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,27 +43,30 @@ public class TaskController {
     private final TaskImageMapper taskImageMapper;
 
     @GetMapping("/{id}")
+    @QueryMapping(name = "taskById")
     @Operation(summary = "Get TaskDto by id")
     @PreAuthorize("@customSecurityExpression.canAccessTask(#id)")
-    public TaskDto getById(@PathVariable final Long id) {
+    public TaskDto getById(@PathVariable @Argument final Long id) {
         Task task = taskService.getById(id);
         return taskMapper.toDto(task);
     }
 
     @PutMapping
+    @MutationMapping(name ="updateTask")
     @Operation(summary = "Update task")
-    @PreAuthorize("@customSecurityExpression.canAccessTask(#taskDto.id)")
+    @PreAuthorize("@customSecurityExpression.canAccessTask(#dto.id)")
     public TaskDto update(@Validated(OnUpdate.class)
-                              @RequestBody final TaskDto taskDto) {
-        Task task = taskMapper.toEntity(taskDto);
+                              @RequestBody @Argument final TaskDto dto) {
+        Task task = taskMapper.toEntity(dto);
         Task updatedTask = taskService.update(task);
         return taskMapper.toDto(updatedTask);
     }
 
     @DeleteMapping("/{id}")
+    @MutationMapping(name ="deleteTask")
     @Operation(summary = "Delete task by id")
     @PreAuthorize("@customSecurityExpression.canAccessTask(#id)")
-    public void deleteById(@PathVariable final Long id) {
+    public void deleteById(@PathVariable @Argument final Long id) {
 
         taskService.delete(id);
     }
