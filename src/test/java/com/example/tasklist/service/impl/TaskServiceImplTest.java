@@ -137,19 +137,19 @@ public class TaskServiceImplTest {
         String imageName = "imageName";
         TaskImage taskImage = new TaskImage();
 
-        Task task = new Task();
+        Task task = new Task(); // Створюємо тестовий об'єкт Task
         task.setId(id);
-        task.setImages(new ArrayList<>());
 
-        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(task));
-        Mockito.when(imageService.upload(taskImage)).thenReturn(imageName);
+        Mockito.when(taskRepository.findById(id)).
+                thenReturn(Optional.of(task));
+        Mockito.when(imageService.upload(taskImage)).
+                thenReturn(imageName);
 
         taskService.uploadImage(id, taskImage);
 
-        Mockito.verify(taskRepository).save(task);
-
-        Assertions.assertTrue(task.getImages().contains(imageName));
+        Mockito.verify(taskRepository).addImage(id, imageName);
     }
+
 
 
 }

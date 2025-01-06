@@ -14,6 +14,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -36,6 +39,14 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     public List<Task> getAllByUserId(final Long userId) {
         return taskRepository.findAllByUserId(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Task> getAllSoonTasks(Duration duration) {
+        LocalDateTime now = LocalDateTime.now();
+        return taskRepository.getAllSoonTasks(Timestamp.valueOf(now),
+                Timestamp.valueOf(now.plus(duration)));
     }
 
     @Override
@@ -80,8 +91,7 @@ public class TaskServiceImpl implements TaskService {
     public void uploadImage(final Long id, final TaskImage image) {
         Task task = getById(id);
         String filename = imageService.upload(image);
-        task.getImages().add(filename);
-        taskRepository.save(task);
+        taskRepository.addImage(id, filename);
     }
 
 }
