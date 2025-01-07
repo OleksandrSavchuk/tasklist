@@ -25,13 +25,13 @@ public class ReminderImpl implements Reminder {
 
     private final MailService mailService;
 
-    private final Duration DURATION = Duration.ofHours(1);
+    private final Duration duration = Duration.ofHours(1);
 
     @Scheduled(cron = "0 * * * * *")
     @Override
     public void remindForTask() {
 
-        List<Task> tasks = taskService.getAllSoonTasks(DURATION);
+        List<Task> tasks = taskService.getAllSoonTasks(duration);
         for (Task task : tasks) {
             User user = userService.getTaskAuthor(task.getId());
             Properties properties = new Properties();

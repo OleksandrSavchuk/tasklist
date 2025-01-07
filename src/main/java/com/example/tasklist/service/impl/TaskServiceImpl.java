@@ -43,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Task> getAllSoonTasks(Duration duration) {
+    public List<Task> getAllSoonTasks(final Duration duration) {
         LocalDateTime now = LocalDateTime.now();
         return taskRepository.getAllSoonTasks(Timestamp.valueOf(now),
                 Timestamp.valueOf(now.plus(duration)));

@@ -1,11 +1,13 @@
 package com.example.tasklist.service.impl;
 
 import com.example.tasklist.config.TestConfig;
+import com.example.tasklist.domain.MailType;
 import com.example.tasklist.domain.exception.ResourceNotFoundException;
 import com.example.tasklist.domain.user.Role;
 import com.example.tasklist.domain.user.User;
 import com.example.tasklist.repository.TaskRepository;
 import com.example.tasklist.repository.UserRepository;
+import com.example.tasklist.service.MailService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Set;
 
 @ExtendWith(SpringExtension.class)
@@ -39,6 +42,9 @@ public class UserServiceImplTest {
 
     @MockBean
     private PasswordEncoder passwordEncoder;
+
+    @MockBean
+    private MailServiceImpl mailService;
 
     @Autowired
     private UserServiceImpl userService;
@@ -118,17 +124,25 @@ public class UserServiceImplTest {
     void create() {
         String username = "username";
         String password = "password";
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user.setPasswordConfirmation(password);
+
         Mockito.when(userRepository.findByUsername(username))
                 .thenReturn(Optional.empty());
+        Mockito.when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
+        Mockito.doNothing().when(mailService).sendMail(Mockito.any(User.class), Mockito.any(MailType.class), Mockito.any(Properties.class));
+
         User testUser = userService.create(user);
+
         Mockito.verify(userRepository).save(user);
         Mockito.verify(passwordEncoder).encode(password);
+        Mockito.verify(mailService).sendMail(Mockito.eq(user), Mockito.eq(MailType.REGISTRATION), Mockito.any(Properties.class));
         Assertions.assertEquals(Set.of(Role.ROLE_USER), testUser.getRoles());
     }
+
 
     @Test
     void createWithExistingUsername() {

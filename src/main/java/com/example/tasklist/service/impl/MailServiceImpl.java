@@ -25,19 +25,22 @@ public class MailServiceImpl implements MailService {
     private final JavaMailSender mailSender;
 
     @Override
-    public void sendMail(User user, MailType type, Properties params) {
+    public void sendMail(final User user,
+                         final MailType type,
+                         final Properties params) {
         switch (type) {
             case REGISTRATION -> sendRegistrationEmail(user, params);
             case REMINDER -> sendReminderEmail(user, params);
-            default -> {}
+            default -> { }
         }
-
     }
 
     @SneakyThrows
-    private void sendRegistrationEmail(User user, Properties params) {
+    private void sendRegistrationEmail(final User user,
+                                       final Properties params) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+        MimeMessageHelper helper = new MimeMessageHelper(
+                mimeMessage, false, "UTF-8");
         helper.setSubject("Thank you for registration, " + user.getName());
         helper.setTo(user.getUsername());
         String emailContent = getRegistrationEmailContent(user, params);
@@ -46,9 +49,11 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private void sendReminderEmail(User user, Properties params) {
+    private void sendReminderEmail(final User user,
+                                   final Properties params) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+        MimeMessageHelper helper = new MimeMessageHelper(
+                mimeMessage, false, "UTF-8");
         helper.setSubject("You have task to do in 1 hour");
         helper.setTo(user.getUsername());
         String emailContent = getReminderEmailContent(user, params);
@@ -57,7 +62,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private String getRegistrationEmailContent(User user, Properties properties) {
+    private String getRegistrationEmailContent(final User user,
+                                               final Properties properties) {
         StringWriter writer = new StringWriter();
         Map<String, Object> model = new HashMap<>();
         model.put("name", user.getName());
@@ -67,7 +73,8 @@ public class MailServiceImpl implements MailService {
     }
 
     @SneakyThrows
-    private String getReminderEmailContent(User user, Properties properties) {
+    private String getReminderEmailContent(final User user,
+                                           final Properties properties) {
         StringWriter writer = new StringWriter();
         Map<String, Object> model = new HashMap<>();
         model.put("name", user.getName());
